@@ -1,12 +1,14 @@
-const { assert } = require('console');
 
 const BigNumber = web3.BigNumber;
 require('chai')
     .use(require('chai-as-promised'))
     .use(require('chai-bignumber')(BigNumber))
-    .should();
+    .should(),
+    assert
 
 // import ether from './helpers/ether'
+
+// const assert = require('chai').assert
 
 const DappToken = artifacts.require('DappToken');
 const DappTokenCrowdsale = artifacts.require('DappTokenCrowdsale');
@@ -57,10 +59,9 @@ contract('DappTokenCrowdsale', ([_, wallet, investor1, investor2]) => {
         it('mints tokens after purchase', async () => {
             const value = web3.utils.toWei('3', 'ether');
             const originalTotalSupply = await this.token.totalSupply();
-            console.log('originalTotalSupply', originalTotalSupply.toString())
             await this.crowdsale.sendTransaction({ value: value, from: investor1 });
             const newTotalSupply = await this.token.totalSupply();
-            console.log('newTotalSupply', newTotalSupply.toString())
+            assert.isTrue(newTotalSupply > originalTotalSupply)
         })
     })
 
